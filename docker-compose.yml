@@ -1,9 +1,5 @@
 version: '3.8'
 
-x-env-keys: &env_key_vars
-  ACCESS_KEY: my-access-key
-  SECRET_KEY: my-secret-key
-
 x-client-url: &env_client_url
   CLIENT_URL: http://swgoh-comlink:3000
 
@@ -13,12 +9,10 @@ services:
     image: ghcr.io/swgoh-utils/swgoh-comlink:latest
     restart: always
     environment:
-      # yaml anchors allow defining pieces of config once and repeating as needed
-      <<: *env_key_vars
       APP_NAME: swgoh-comlink-dev
       PORT: 3000
     ports:
-      - 5000:3000
+      - 3000:3000
     networks:
       - comlink
 
@@ -30,7 +24,7 @@ services:
       - swgoh-comlink
     environment:
       # combine multiple sets of values as defaults using yaml anchors
-      <<: [*env_key_vars, *env_client_url]
+      <<: *env_client_url
       PORT: 3223
     volumes:
       - "./statCalcData:/app/statCalcData"
